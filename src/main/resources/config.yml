@@ -1,0 +1,185 @@
+# Login for MYSQL
+database:
+  host: mysql.example.com                      # Host for the MySQL database
+  port: '3306'                                   # Port for the MySQL database
+  base: db                                 # Database name
+  user: user                            # Username for MySQL database
+  password: passwd             # Password for MySQL database
+
+# Auth settings
+#  auth-server - Server Auth
+#  lobby-server - Server Lobby
+#  admin-permission - Permission admin for command /auth
+#
+# Queue settings
+#  max_connection_time - Time for maximum connection duration
+#  priorities - Priorities for queue
+#  Example:
+#   queue.premium: 1 -> Lowest
+#   queue.admin: 2 -> Highest
+auth-settings:
+  maxaccountip: 3                               # Max accounts per IP
+  auth-server: auth                              # Server for authentication
+  lobby-server: lobby                            # Server for lobby
+  admin-permission: antauth.admin                # Admin permission for command /auth
+  queue:
+    max-connection-time: 5                       # Max time to connect to the server
+    max-retries: 3                               # Max retries to connect to the server
+    priorities:
+      queue.admin: 1                               # Priority level for admins (highest)
+      queue.premium: 2                             # Priority level for premium users
+      queue.default: 3                             # Priority level for default users (lowest)
+
+# Messages for auth
+  messages:
+    login:
+      title: true                                   # Show title notification for login
+      chat: true                                    # Show chat notification for login
+    register:
+      title: true                                   # Show title notification for registration
+      chat: true                                    # Show chat notification for registration
+    logged:
+      title: true                                   # Show title notification for logged in
+      chat: true                                    # Show chat notification for logged in
+    registered:
+      title: true                                   # Show title notification for successfully registered
+      chat: true                                    # Show chat notification for successfully registered
+    premium-logged:
+      title: true                                   # Show title notification for premium user logged in
+      chat: true                                    # Show chat notification for premium user logged in
+
+# Motd settings
+# Variables:
+#   playersInfo:
+#   - {ONLINE_PLAYERS} - Online players
+#   - {MAX_PLAYERS} - Max Players
+#   hoverLines:
+#   - {PROXY_CPU_USAGE} - CPU Usage
+#   - {COUNTER_PLAYERS_LIMIT}
+motd:
+  first-line: "&8>> &7Plugin for authentication &6BUNGEECORD"  # First line of the MOTD
+  second-line: "&8>> &7Created by &6Antowksyy"      # Second line of the MOTD
+  third-line: "&6antAuth"                                 # Third line of the MOTD
+  playersInfo: "&e{ONLINE_PLAYERS}&8/&6{MAX_PLAYERS}"  # Info players
+  # Hover text for plugin info
+  hoverLines:
+    - ""
+    - "&8>> &6antAuth"
+    - "&8>> &7Version&8: &61.0-SNAPSHOT"
+    - ""
+    - "&8>> &7CPU Usage&8: &6{PROXY_CPU_USAGE}%"
+    - "&8>> &7Limit Players&8: &6{COUNTER_PLAYERS_LIMIT}"
+    - ""
+  maxPlayersCount: 300                                  # Max players count allowed
+  maxPlayersCount-status: false                         # Status of max players count on motd
+
+# Messages auth
+messages:
+  # Variables queue:
+  #   - {POSITION} - Position in the queue
+  #   - {TIME} - Time for connecting to the server
+  queue:
+    waiting: "&8>> &7You are &e{POSITION} &7in the queue! &8<<" # Message for waiting in queue
+    sending: "&8>> &eYou will be sent to the server shortly. &8<<"   # Message for sending player to server
+    connecting: "&8>> &aAttempting to connect to the server... &e({TIME}) &8<<" # Message for connecting to server
+    connection-failed: "&8>> &cFailed to connect to the target server! Retrying connection... &8<<" # Message for connection failure
+    success-connect: "&8>> &aSuccess connected to lobby &8<<"
+    max-retries-kick: "&cCould not connect to the lobby, {RETRYCOUNT} attempts made."
+  usage:
+    register:
+      chat: "&6antAuth &8>> &7Register&8: &e/register [password] [password]" # Usage instruction for registration in chat
+      title: "&6antAuth"                                      # Title for registration
+      subtitle: "&8>> &7Register&8: &e/register [password] [password]" # Subtitle for registration
+    login:
+      chat: "&6antAuth &8>> &7Login&8: &e/login [password]"                 # Usage instruction for login in chat
+      title: "&6antAuth"                                      # Title for login
+      subtitle: "&8>> &7Login&8: &e/login [password]"             # Subtitle for login
+    admin:
+      changepassword: "&6antAuth &8>> &7Correct usage&8: &e/auth changepassword [player] [password]" # Usage instruction for admin to change password
+      unregister: "&6antAuth &8>> &7Correct usage&8: &e/auth unregister [player]" # Usage instruction for admin to unregister a player
+      info: "&6antAuth &8>> &7Correct usage&8: &e/auth info [player]"        # Usage instruction for admin to get player info
+      help:
+        - ""
+        - "            &6antAuth       "
+        - ""
+        - "&e/auth changepassword [player] [password] &8- &7Change player password" # Help for changing password
+        - "&e/auth unregister [player] &8- &7Unregister player" # Help for unregistering a player
+        - "&e/auth info [player] &8- &7Player information"     # Help for getting player info
+        - "&e/auth reload &8- &7Reload configuration"        # Help for reloading configuration
+        - ""
+    user:
+      unregister: "&6antAuth &8>> &7Correct usage&8: &e/unregister [password] [password]" # Usage instruction for user to unregister
+      register: "&6antAuth &8>> &7Correct usage&8: &e/register [password] [password]"     # Usage instruction for user to register
+      login: "&6antAuth &8>> &7Correct usage&8: &e/login [password]"                    # Usage instruction for user to login
+      changepassword: "&6antAuth &8>> &7Correct usage&8: &e/changepassword [password] [new password]" # Usage instruction for user to change password
+  success:
+    createUser: "&aUser successfully created, please rejoin the server!" # Success message for user creation
+    logged:
+      chat-logged: "&6antAuth &8>> &aSuccessfully logged in"                  # Success message for login in chat
+      title-logged: "&6antAuth"                               # Title for successful login
+      subtitle-logged: "&8>> &aSuccessfully logged in"              # Subtitle for successful login
+    registered:
+      chat-registered: "&6antAuth &8>> &aSuccessfully registered"          # Success message for registration in chat
+      title-registered: "&6antAuth"                           # Title for successful registration
+      subtitle-registered: "&8>> &aSuccessfully registered!"     # Subtitle for successful registration
+    premium-logged:
+      chat-premium: "&6antAuth &8>> &aSuccessfully logged in with premium"       # Success message for premium login in chat
+      title-premium: "&6antAuth"                              # Title for successful premium login
+      subtitle-premium: "&8>> &aSuccessfully logged in with premium"   # Subtitle for successful premium login
+    commands:
+      admin:
+        unregister:
+          playerKick: "&6antAuth &8>> &7You have been unregistered by &e{ADMIN}" # Message for player kicked by admin
+          adminMsg: "&6antAuth &8>> &aSuccessfully unregistered player {PLAYER}" # Message for admin after unregistering a player
+        changepassword:
+          playerMsg: "&6antAuth &8>> &7Your password was changed by &c{ADMIN}" # Message for player after password change by admin
+          adminMsg: "&6antAuth &8>> &aSuccessfully changed password for player &e{PLAYER}" # Message for admin after changing player's password
+        reload: "&6antAuth &8>> &aSuccessfully reloaded configuration!"         # Message for reloading configuration
+        info:
+          # Variables info player:
+          #  - {PLAYER} - Player nickname
+          #  - {UUID} - Player UUID
+          #  - {PREMIUM} - Player premium status
+          #  - {LASTIP} - Player last IP
+          - ""
+          - "         &6antAuth       "
+          - ""
+          - "&8>> &7Name&8: &e{PLAYER}"
+          - "&8>> &7UUID&8: &e{UUID}"
+          - "&8>> &7Status premium&8: &e{PREMIUM}"
+          - "&8>> &7Last ip&8: &e{LASTIP}"
+          - ""
+      user:
+        changepassword: "&6antAuth &8>> &aPassword successfully changed!"        # Message for user after changing password
+        unregister: "&6antAuth &8>> &aYou have successfully unregistered!"    # Message for user after unregistering
+  error:
+    # Variables error:
+    #   connectCooldown:
+    #     - {TIME} - Time to wait connection again
+    #   playerOnline:
+    #     - {PLAYER} - Player already online on the server
+    #   errorNickname:
+    #     - {NAME} - Correct name
+    userError: "&6antAuth &8>> &cAn error occurred while loading player information!" # Error message for user loading issue
+    invalidName: "&6antAuth &8>> &cYour nickname contains invalid characters!" # Error message for invalid nickname
+    connectCooldown: "&6antAuth &8>> &cYou are connecting too fast, please wait &e{TIME}" # Error message for connection cooldown
+    playerOnline: "&6antAuth &8>> &cThe player with the nickname &e{PLAYER} &cis already on the server!" # Error message for player already online
+    errorNickname: "&6antAuth &8>> &cYour correct nickname is &e{NAME}" # Error message for incorrect nickname
+    notLogged: "&6antAuth &8>> &cYou must log in to execute the given command!" # Error message for not logged in
+    notRegistered: "&6antAuth &8>> &cYou must register to execute the given command!" # Error message for not registered
+    userLogged: "&6antAuth &8>> &cYou are already logged in!" # Error message for already logged in
+    userRegistered: "&6antAuth &8>> &cYou are already registered!" # Error message for already registered user
+    timeoutLogin: "&6antAuth &8>> &cLogin time has expired!" # Error message for login timeout
+    passwordSame: "&6antAuth &8>> &cThe passwords entered are the same!" # Error message for same passwords
+    passwordsNotsame: "&6antAuth &8>> &cThe passwords entered are not the same!" # Error message for different passwords
+    passwordIncorrect: "&6antAuth &8>> &cThe password entered is incorrect!" # Error message for incorrect password
+    userNotRegistered: "&6antAuth &8>> &cYou aren't registered!" # Error message for not registered user
+    userisPremium: "&6antAuth &8>> &cPremium players cannot use this command!" # Error message for premium users
+    maxAccountsIP: "&6antAuth &8>> &cYou cannot register because, you have exceeded the account limit!" # Error message for max accounts per IP
+    noPermission: "&6antAuth &8>> &cYou don't have permission to execute this command!" # Error message for no permission
+    adminUserError: "&6antAuth &8>> &cThe specified player wasn't found!" # Error message for admin user not found
+    adminUserPremium: "&6antAuth &8>> &cThe specified player has premium!" # Error message for admin user is premium
+    adminUserNotRegistered: "&6antAuth &8>> &cThe specified player is not registered!" # Error message for admin user is not registered
+
+
+

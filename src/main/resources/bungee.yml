@@ -1,0 +1,5 @@
+name: antAuth
+version: '${project.version}'
+main: pl.antowskyy.antauth.AntAuth
+author: Antowskyy
+description: Plugin na logowanie
