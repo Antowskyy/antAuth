@@ -2,4 +2,4 @@ name: antAuth
 version: '${project.version}'
 main: pl.antowskyy.antauth.AntAuth
 author: Antowskyy
-description: Plugin na logowanie
+description: Authentication Plugin for BungeeCord

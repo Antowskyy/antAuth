@@ -11,6 +11,8 @@ import pl.antowskyy.antauth.helpers.ChatHelper;
 import pl.antowskyy.antauth.managers.UserManager;
 import pl.antowskyy.antauth.runnables.MessageLoginRunnable;
 
+import java.util.List;
+
 public class LoginCommand extends Command
 {
     public LoginCommand() {
@@ -46,13 +48,16 @@ public class LoginCommand extends Command
         user.setLogged(true);
         ProxiedPlayer player = (ProxiedPlayer)sender;
         MessageLoginRunnable.players.remove(player);
-        player.connect(AntAuth.getInstance().getProxy().getServerInfo(ConfigurationPlugin.getConfiguration().getString("auth-settings.lobby-server")));
 
-        if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.logged.title")) {
-            ChatHelper.sendTitle(player, ConfigurationPlugin.getConfiguration().getString("messages.success.logged.title-logged"), ConfigurationPlugin.getConfiguration().getString("messages.success.logged.subtitle-logged"), 5);
-        }
-        if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.logged.chat")) {
-            sender.sendMessage(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.success.logged.chat-logged")));
+        List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.success.logged");
+
+        for (String message : messages) {
+            if (message.startsWith("[TITLE]")) {
+                ChatHelper.handleTitleMessage(player, message);
+            }
+            else if (message.startsWith("[MESSAGE]")) {
+                ChatHelper.handleChatMessage(player, message);
+            }
         }
     }
 }

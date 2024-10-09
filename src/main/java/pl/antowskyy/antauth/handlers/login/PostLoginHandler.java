@@ -10,6 +10,8 @@ import pl.antowskyy.antauth.data.User;
 import pl.antowskyy.antauth.helpers.ChatHelper;
 import pl.antowskyy.antauth.managers.UserManager;
 import pl.antowskyy.antauth.runnables.TimeLoginRunnable;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -29,24 +31,44 @@ public class PostLoginHandler implements Listener
         }
         if (!user.isPremium()) {
             user.setLogged(false);
-            player.sendMessage(ChatHelper.fixColor(!user.isRegistered() ? ConfigurationPlugin.getConfiguration().getString("messages.usage.register.chat")
-                    : ConfigurationPlugin.getConfiguration().getString("messages.usage.login.chat")));
 
-            ChatHelper.sendTitle(player,
-                    (!user.isRegistered() ? ConfigurationPlugin.getConfiguration().getString("messages.usage.register.title")
-                    : ConfigurationPlugin.getConfiguration().getString("messages.usage.login.title")),
-                    (!user.isRegistered() ? ConfigurationPlugin.getConfiguration().getString("messages.usage.register.subtitle")
-                    : ConfigurationPlugin.getConfiguration().getString("messages.usage.login.subtitle")), 3);
+            if (user.isRegistered()) {
+                List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.usage.login");
+                for (String message : messages) {
+                    if (message.startsWith("[TITLE]")) {
+                        ChatHelper.handleTitleMessage(player, message);
+                    }
+                    else if (message.startsWith("[MESSAGE]")) {
+                        ChatHelper.handleChatMessage(player, message);
+                    }
+                }
+            }
+            else {
+                List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.usage.register");
+                for (String message : messages) {
+                    if (message.startsWith("[TITLE]")) {
+                        ChatHelper.handleTitleMessage(player, message);
+                    }
+                    else if (message.startsWith("[MESSAGE]")) {
+                        ChatHelper.handleChatMessage(player, message);
+                    }
+                }
+            }
 
             AntAuth.getInstance().getProxy().getScheduler().schedule(AntAuth.getInstance(), new TimeLoginRunnable(player, user), 60L, TimeUnit.SECONDS);
-        } else {
+        }
+        else {
             user.setLogged(true);
 
-            if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.premium-logged.title")) {
-                ChatHelper.sendTitle(player, ConfigurationPlugin.getConfiguration().getString("messages.success.premium-logged.title-premium"), ConfigurationPlugin.getConfiguration().getString("messages.success.premium-logged.subtitle-premium"), 5);
-            }
-            if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.premium-logged.chat")) {
-                player.sendMessage(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.success.premium-logged.chat-premium")));
+            List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.success.premium-logged");
+
+            for (String message : messages) {
+                if (message.startsWith("[TITLE]")) {
+                    ChatHelper.handleTitleMessage(player, message);
+                }
+                else if (message.startsWith("[MESSAGE]")) {
+                    ChatHelper.handleChatMessage(player, message);
+                }
             }
         }
     }

@@ -1,18 +1,15 @@
 package pl.antowskyy.antauth.commands.admin;
 
 import com.google.common.collect.ImmutableSet;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.TabExecutor;
+import net.md_5.bungee.api.plugin.*;
 import org.mindrot.jbcrypt.BCrypt;
 import pl.antowskyy.antauth.AntAuth;
 import pl.antowskyy.antauth.configuration.ConfigurationPlugin;
 import pl.antowskyy.antauth.data.User;
 import pl.antowskyy.antauth.helpers.ChatHelper;
 import pl.antowskyy.antauth.managers.UserManager;
-
 import java.util.HashSet;
 
 public class AuthCommand extends Command implements TabExecutor {
@@ -99,7 +96,7 @@ public class AuthCommand extends Command implements TabExecutor {
                 ConfigurationPlugin.getConfiguration().getStringList("messages.success.commands.admin.info").forEach(message ->
                         sender.sendMessage(ChatHelper.fixColor(message)
                                 .replace("{PLAYER}", user.getName())
-                                .replace("{PREMIUM}", (user.isPremium() ? "&aYes" : "&cNo"))
+                                .replace("{PREMIUM}", (user.isPremium() ? "&2&l✔" : "&4&l❌"))
                                 .replace("{LASTIP}", user.getLastIP())
                                 .replace("{UUID}", user.getUUID().toString())));
 

@@ -34,4 +34,37 @@ public class ChatHelper
         }
         player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(fixColor(message)));
     }
+
+    public static void handleTitleMessage(ProxiedPlayer player, String message) {
+
+        if (message.length() < 7) {
+            AntAuth.getInstance().getLogger().warning("Message too short: " + message);
+            return;
+        }
+
+        String[] parts = message.substring(7).split("\\|");
+
+        if (parts.length != 3) {
+            AntAuth.getInstance().getLogger().warning("Invalid title format: " + message);
+            return;
+        }
+
+        String title = parts[0].trim();
+        String subtitle = parts[1].trim();
+
+        int stay;
+        try {
+            stay = Integer.parseInt(parts[2].trim());
+        } catch (NumberFormatException e) {
+            AntAuth.getInstance().getLogger().warning("Invalid numbers in title format: " + message);
+            return;
+        }
+
+        sendTitle(player, title, subtitle, stay);
+    }
+
+    public static void handleChatMessage(ProxiedPlayer player, String message) {
+        String chatMessage = message.substring(9);
+        player.sendMessage(fixColor(chatMessage));
+    }
 }

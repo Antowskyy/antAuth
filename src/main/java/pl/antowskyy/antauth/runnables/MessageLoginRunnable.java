@@ -23,21 +23,28 @@ public class MessageLoginRunnable implements Runnable
             if (user.isPremium()) return;
             if (!user.isRegistered())
             {
-                if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.register.title")) {
-                    ChatHelper.sendTitle(player, ConfigurationPlugin.getConfiguration().getString("messages.usage.register.title"), ConfigurationPlugin.getConfiguration().getString("messages.usage.register.subtitle"), 4);
-                }
-                if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.register.chat")) {
-                    player.sendMessage(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.usage.register.chat")));
+                List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.usage.register");
+                for (String message : messages) {
+                    if (message.startsWith("[TITLE]")) {
+                        ChatHelper.handleTitleMessage(player, message);
+                    }
+                    else if (message.startsWith("[MESSAGE]")) {
+                        ChatHelper.handleChatMessage(player, message);
+                    }
                 }
                 continue;
             }
             if (!user.isLogged())
             {
-                if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.login.title")) {
-                    ChatHelper.sendTitle(player, ConfigurationPlugin.getConfiguration().getString("messages.usage.login.title"), ConfigurationPlugin.getConfiguration().getString("messages.usage.login.subtitle"), 4);
-                }
-                if (ConfigurationPlugin.getConfiguration().getBoolean("auth-settings.messages.login.chat")) {
-                    player.sendMessage(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.usage.login.chat")));
+                List<String> messages = ConfigurationPlugin.getConfiguration().getStringList("messages.usage.login");
+
+                for (String message : messages) {
+                    if (message.startsWith("[TITLE]")) {
+                        ChatHelper.handleTitleMessage(player, message);
+                    }
+                    else if (message.startsWith("[MESSAGE]")) {
+                        ChatHelper.handleChatMessage(player, message);
+                    }
                 }
             }
         }

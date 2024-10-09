@@ -17,7 +17,6 @@ public class PreLoginHandler implements Listener {
     private static final Pattern pattern = Pattern.compile("^[0-9a-zA-Z-_]+$");
     private static final HashMap<String, Long> times = new HashMap<>();
 
-
     @EventHandler(priority = 10)
     public void onLogin(LoginEvent event) {
         if (event.isCancelled())

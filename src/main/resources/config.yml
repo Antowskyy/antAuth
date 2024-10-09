@@ -30,24 +30,6 @@ auth-settings:
       queue.premium: 2                             # Priority level for premium users
       queue.default: 3                             # Priority level for default users (lowest)
 
-# Messages for auth
-  messages:
-    login:
-      title: true                                   # Show title notification for login
-      chat: true                                    # Show chat notification for login
-    register:
-      title: true                                   # Show title notification for registration
-      chat: true                                    # Show chat notification for registration
-    logged:
-      title: true                                   # Show title notification for logged in
-      chat: true                                    # Show chat notification for logged in
-    registered:
-      title: true                                   # Show title notification for successfully registered
-      chat: true                                    # Show chat notification for successfully registered
-    premium-logged:
-      title: true                                   # Show title notification for premium user logged in
-      chat: true                                    # Show chat notification for premium user logged in
-
 # Motd settings
 # Variables:
 #   playersInfo:
@@ -86,14 +68,18 @@ messages:
     success-connect: "&8>> &aSuccess connected to lobby &8<<"
     max-retries-kick: "&cCould not connect to the lobby, {RETRYCOUNT} attempts made."
   usage:
+    # [TITLE] - Send title to player
+    # "[TITLE] title|subtitle|stay"
+    # Example: "[TITLE] &eTITLE|&aSUBTITLE|5"
+    # [MESSAGE] - Send message to player
+    # "[MESSAGE] message"
+    # Example: "[MESSAGE] &eMessage!"
     register:
-      chat: "&6antAuth &8>> &7Register&8: &e/register [password] [password]" # Usage instruction for registration in chat
-      title: "&6antAuth"                                      # Title for registration
-      subtitle: "&8>> &7Register&8: &e/register [password] [password]" # Subtitle for registration
+      - "[TITLE] &6antAuth|&8>> &7Register&8: &e/register [password] [password]|3"
+      - "[MESSAGE] &6antAuth &8>> &7Register&8: &e/register [password] [password]"
     login:
-      chat: "&6antAuth &8>> &7Login&8: &e/login [password]"                 # Usage instruction for login in chat
-      title: "&6antAuth"                                      # Title for login
-      subtitle: "&8>> &7Login&8: &e/login [password]"             # Subtitle for login
+      - "[TITLE] &6antAuth|&8>> &7Login&8: &e/login [password]|3"
+      - "[MESSAGE] &6antAuth &8>> &7Login&8: &e/login [password]"
     admin:
       changepassword: "&6antAuth &8>> &7Correct usage&8: &e/auth changepassword [player] [password]" # Usage instruction for admin to change password
       unregister: "&6antAuth &8>> &7Correct usage&8: &e/auth unregister [player]" # Usage instruction for admin to unregister a player
@@ -114,18 +100,21 @@ messages:
       changepassword: "&6antAuth &8>> &7Correct usage&8: &e/changepassword [password] [new password]" # Usage instruction for user to change password
   success:
     createUser: "&aUser successfully created, please rejoin the server!" # Success message for user creation
+    # [TITLE] - Send title to player
+    # "[TITLE] title|subtitle|stay"
+    # Example: "[TITLE] &eTITLE|&aSUBTITLE|5"
+    # [MESSAGE] - Send message to player
+    # "[MESSAGE] message"
+    # Example: "[MESSAGE] &eMessage!"
     logged:
-      chat-logged: "&6antAuth &8>> &aSuccessfully logged in"                  # Success message for login in chat
-      title-logged: "&6antAuth"                               # Title for successful login
-      subtitle-logged: "&8>> &aSuccessfully logged in"              # Subtitle for successful login
+      - "[TITLE] &6antAuth|&8>> &aSuccessfully logged in!|3"
+      - "[MESSAGE] &6antAuth &8>> &aSuccessfully logged in!"
     registered:
-      chat-registered: "&6antAuth &8>> &aSuccessfully registered"          # Success message for registration in chat
-      title-registered: "&6antAuth"                           # Title for successful registration
-      subtitle-registered: "&8>> &aSuccessfully registered!"     # Subtitle for successful registration
+      - "[TITLE] &6antAuth|&8>> &aSuccessfully registered!|3"
+      - "[MESSAGE] &6antAuth &8>> &aSuccessfully registered!"
     premium-logged:
-      chat-premium: "&6antAuth &8>> &aSuccessfully logged in with premium"       # Success message for premium login in chat
-      title-premium: "&6antAuth"                              # Title for successful premium login
-      subtitle-premium: "&8>> &aSuccessfully logged in with premium"   # Subtitle for successful premium login
+      - "[TITLE] &6antAuth|&8>> &aSuccessfully logged in with premium!|3"
+      - "[MESSAGE] &6antAuth &8>> &aSuccessfully logged in with premium!"
     commands:
       admin:
         unregister:

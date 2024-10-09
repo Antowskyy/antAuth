@@ -2,7 +2,6 @@ package pl.antowskyy.antauth;
 
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
 import pl.antowskyy.antauth.commands.admin.AuthCommand;
 import pl.antowskyy.antauth.commands.player.*;
 import pl.antowskyy.antauth.configuration.ConfigurationPlugin;
@@ -11,12 +10,9 @@ import pl.antowskyy.antauth.database.Database;
 import pl.antowskyy.antauth.handlers.login.*;
 import pl.antowskyy.antauth.handlers.player.*;
 import pl.antowskyy.antauth.handlers.server.*;
-import pl.antowskyy.antauth.managers.QueueManager;
-import pl.antowskyy.antauth.managers.UserManager;
+import pl.antowskyy.antauth.helpers.UpdateHelper;
+import pl.antowskyy.antauth.managers.*;
 import pl.antowskyy.antauth.runnables.*;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public final class AntAuth extends Plugin
@@ -31,42 +27,54 @@ public final class AntAuth extends Plugin
     @Override
     public void onEnable()
     {
-        getLogger().info("[antAuth] Starting plugin....");
+        getLogger().info("Starting plugin....");
         instance = this;
-        getLogger().info("[antAuth] Loading configuration...");
+        getLogger().info("Checking update...");
+        new UpdateHelper(this, 119985).getVersion(version -> {
+            if (this.getDescription().getVersion().equals(version)) {
+                getLogger().info("There is not a new update available.");
+            } else {
+                getLogger().info("");
+                getLogger().info("There is a new update available!");
+                getLogger().info("Be sure to download the new version!");
+                getLogger().info("");
+                this.getProxy().stop();
+            }
+        });
+        getLogger().info("Loading configuration...");
         new ConfigurationPlugin().loadConfig();
-        getLogger().info("[antAuth] Loading database...");
+        getLogger().info("Loading database...");
         database = new Database();
         registerDatabase();
-        getLogger().info("[antAuth] Loading managers...");
+        getLogger().info("Loading managers...");
         UserManager.loadUsers();
         queueManager = new QueueManager();
-        getLogger().info("[antAuth] Loading commands...");
+        getLogger().info("Loading commands...");
         registerCommands();
-        getLogger().info("[antAuth] Loading handlers...");
+        getLogger().info("Loading handlers...");
         registerHandlers();
-        getLogger().info("[antAuth] Loading runnables...");
+        getLogger().info("Loading runnables...");
         registerRunnables();
-        getLogger().info("[antAuth] Enabled plugin!");
+        getLogger().info("Enabled plugin!");
     }
 
     @Override
     public void onDisable()
     {
-        getLogger().info("[antAuth] Disabling plugin...");
-        getLogger().info("[antAuth] Saving players data...");
+        getLogger().info("Disabling plugin...");
+        getLogger().info("Saving players data...");
         getProxy().getPlayers().forEach(player -> {
             User user = UserManager.getUser(player.getUniqueId());
             user.update();
         });
-        getLogger().info("[antAuth] Saving configuration...");
+        getLogger().info("Saving configuration...");
         new ConfigurationPlugin().saveConfig();
-        instance = null;
-        getLogger().info("[antAuth] Disconnecting database...");
+        getLogger().info("Disconnecting database...");
         if (database != null) {
             database.close();
         }
-        getLogger().info("[antAuth] Disabled plugin!");
+        instance = null;
+        getLogger().info("Disabled plugin!");
     }
 
 

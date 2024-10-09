@@ -5,8 +5,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pl.antowskyy.antauth.data.User;
-import pl.antowskyy.antauth.managers.QueueManager;
-import pl.antowskyy.antauth.managers.UserManager;
+import pl.antowskyy.antauth.managers.*;
 import pl.antowskyy.antauth.runnables.MessageLoginRunnable;
 
 public class PlayerDisconnectHandler implements Listener

@@ -3,10 +3,8 @@ package pl.antowskyy.antauth.managers;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.yaml.snakeyaml.Yaml;
 import pl.antowskyy.antauth.data.Queue;
-
 import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class QueueManager {
     private final List<Queue> queue = new LinkedList<>();
@@ -31,9 +29,8 @@ public class QueueManager {
 
     public void addPlayerToQueue(ProxiedPlayer player) {
         if (isPlayerInQueue(player)) {
-            return;  // Jeśli gracz już jest w kolejce, nie dodajemy go ponownie
+            return;
         }
-
         int priority = getPlayerPriority(player);
         queue.add(new Queue(player, priority));
         sortQueue();
