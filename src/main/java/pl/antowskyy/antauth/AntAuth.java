@@ -64,7 +64,7 @@ public final class AntAuth extends Plugin
         getLogger().info("Disabling plugin...");
         getLogger().info("Saving players data...");
         getProxy().getPlayers().forEach(player -> {
-            User user = UserManager.getUser(player.getUniqueId());
+            User user = UserManager.getUser(player.getName());
             user.update();
         });
         getLogger().info("Saving configuration...");
@@ -80,20 +80,20 @@ public final class AntAuth extends Plugin
 
     private void registerHandlers()
     {
-        getProxy().getPluginManager().registerListener(this, new PostLoginHandler());
+        getProxy().getPluginManager().registerListener(this, new PostLoginHandler(queueManager));
         getProxy().getPluginManager().registerListener(this, new PreLoginHandler());
         getProxy().getPluginManager().registerListener(this, new PlayerChatHandler());
         getProxy().getPluginManager().registerListener(this, new PlayerDisconnectHandler(queueManager));
         getProxy().getPluginManager().registerListener(this, new ServerPingHandler());
-        getProxy().getPluginManager().registerListener(this, new ServerConnectHandler(queueManager));
+        getProxy().getPluginManager().registerListener(this, new ServerConnectHandler());
     }
 
     private void registerCommands()
     {
         getProxy().getPluginManager().registerCommand(this, new AuthCommand());
         getProxy().getPluginManager().registerCommand(this, new ChangepasswordCommand());
-        getProxy().getPluginManager().registerCommand(this, new LoginCommand());
-        getProxy().getPluginManager().registerCommand(this, new RegisterCommand());
+        getProxy().getPluginManager().registerCommand(this, new LoginCommand(queueManager));
+        getProxy().getPluginManager().registerCommand(this, new RegisterCommand(queueManager));
         getProxy().getPluginManager().registerCommand(this, new UnregisterCommand());
     }
 

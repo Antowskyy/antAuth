@@ -96,7 +96,7 @@ public class AuthCommand extends Command implements TabExecutor {
                 ConfigurationPlugin.getConfiguration().getStringList("messages.success.commands.admin.info").forEach(message ->
                         sender.sendMessage(ChatHelper.fixColor(message)
                                 .replace("{PLAYER}", user.getName())
-                                .replace("{PREMIUM}", (user.isPremium() ? "&2&l✔" : "&4&l❌"))
+                                .replace("{PREMIUM}", (user.isPremium() ? ChatHelper.fixColor("&2&l✔") : ChatHelper.fixColor("&4&l❌")))
                                 .replace("{LASTIP}", user.getLastIP())
                                 .replace("{UUID}", user.getUUID().toString())));
 

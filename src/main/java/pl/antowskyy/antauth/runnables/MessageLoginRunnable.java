@@ -15,7 +15,7 @@ public class MessageLoginRunnable implements Runnable
     @Override
     public void run() {
         for (ProxiedPlayer player : AntAuth.getInstance().getProxy().getPlayers()) {
-            User user = UserManager.getUser(player.getUniqueId());
+            User user = UserManager.getUser(player.getName());
             if (user == null) {
                 player.disconnect(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.userError")));
                 continue;

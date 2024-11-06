@@ -4,10 +4,10 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import org.mindrot.jbcrypt.BCrypt;
-import pl.antowskyy.antauth.AntAuth;
 import pl.antowskyy.antauth.configuration.ConfigurationPlugin;
 import pl.antowskyy.antauth.data.User;
 import pl.antowskyy.antauth.helpers.ChatHelper;
+import pl.antowskyy.antauth.managers.QueueManager;
 import pl.antowskyy.antauth.managers.UserManager;
 import pl.antowskyy.antauth.runnables.MessageLoginRunnable;
 
@@ -15,8 +15,11 @@ import java.util.List;
 
 public class LoginCommand extends Command
 {
-    public LoginCommand() {
+    private final QueueManager queueManager;
+
+    public LoginCommand(QueueManager queueManager) {
         super("login", null, "l");
+        this.queueManager = queueManager;
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -59,5 +62,6 @@ public class LoginCommand extends Command
                 ChatHelper.handleChatMessage(player, message);
             }
         }
+        queueManager.addPlayerToQueue(player);
     }
 }

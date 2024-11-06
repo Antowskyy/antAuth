@@ -8,24 +8,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManager
 {
-    private static final Map<UUID, User> users = new ConcurrentHashMap<>();
+    private static final Map<String, User> users = new ConcurrentHashMap<>();
 
     public static void createUser(UUID uuid, String name, String ip, Boolean premium) {
         User user = new User(uuid, name, ip, premium);
-        users.put(user.getUUID(), user);
+        users.put(user.getName(), user);
     }
-
-    public static User getUser(UUID uuid) {
-        return users.get(uuid);
-    }
-
 
     public static User getUser(String name) {
         return getUsers().parallelStream().filter(user -> user.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public static void deleteUser(User user) {
-        users.remove(user.getUUID());
+        users.remove(user.getName());
         AntAuth.getDatabase().executeUpdate("DELETE FROM `antauth_users` WHERE `uuid` = '" + user.getUUID() + "'");
     }
 
@@ -43,7 +38,7 @@ public class UserManager
             try {
                 while (rs.next()) {
                     User user = new User(rs);
-                    users.put(user.getUUID(), user);
+                    users.put(user.getName(), user);
                 }
                 rs.close();
             }

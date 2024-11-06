@@ -34,12 +34,16 @@ public class QueueRunnable implements Runnable {
                 Queue queuedPlayer = playersInQueue.get(i);
                 ProxiedPlayer player = queuedPlayer.getPlayer();
 
+                if (!player.isConnected()) {
+                    return;
+                }
+
                 if (!player.getServer().getInfo().getName().equalsIgnoreCase(authServer)) {
-                    continue;
+                    return;
                 }
 
                 if (!queueManager.isPlayerInQueue(player)) {
-                    continue;
+                    return;
                 }
 
                 if (queuedPlayer.isAttemptingConnection()) {

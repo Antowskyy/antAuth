@@ -19,8 +19,11 @@ public final class PlayerChatHandler implements Listener
         }
 
         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = UserManager.getUser(player.getName());
         if (Objects.isNull(user)) {
+            return;
+        }
+        if (!player.getServer().getInfo().getName().equalsIgnoreCase("auth")) {
             return;
         }
 

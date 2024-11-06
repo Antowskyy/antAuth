@@ -23,13 +23,7 @@ public class PreLoginHandler implements Listener {
             return;
         PendingConnection connection = event.getConnection();
         String name = event.getConnection().getName();
-        UUID uuid = event.getConnection().getUniqueId();
-        User user = UserManager.getUser(uuid);
-        if (user == null) {
-            (PremiumHelper.checkPremium2(connection.getName()).thenAccept(premium -> UserManager.createUser(connection.getUniqueId(), connection.getName(), connection.getAddress().getAddress().getHostAddress(), premium))).exceptionally(throwable -> null);
-            event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.success.createUser")));
-            event.setCancelled(true);
-        }
+        User user = UserManager.getUser(connection.getName());
         if (user != null) {
             if (!user.getName().equals(name)) {
                 event.setCancelled(true);
@@ -39,8 +33,8 @@ public class PreLoginHandler implements Listener {
         }
     }
 
-    @EventHandler(priority = 0)
-    public void onPreLogin(PreLoginEvent event) throws IOException {
+    @EventHandler(priority = 69)
+    public void onPreLogin(PreLoginEvent event) {
         if (event.isCancelled())
             return;
         PendingConnection connection = event.getConnection();
@@ -52,7 +46,7 @@ public class PreLoginHandler implements Listener {
         Long loginLong = times.get(event.getConnection().getAddress().getAddress().getHostAddress());
         if (loginLong != null && loginLong > System.currentTimeMillis()) {
             event.setCancelled(true);
-            event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.connectCooldown").replace("{TIME}", TimeHelper.timeToString(loginLong))));
+            event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.connectCooldown").replace("{TIME}", TimeHelper.timeToString(System.currentTimeMillis() - loginLong))));
             return;
         }
         ProxiedPlayer player = AntAuth.getInstance().getProxy().getPlayer(event.getConnection().getName());
@@ -66,10 +60,19 @@ public class PreLoginHandler implements Listener {
             event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.invalidName")));
             return;
         }
-        boolean premium = PremiumHelper.checkPremium(connection.getName());
-        if (premium != event.getConnection().isOnlineMode())
-            event.getConnection().setOnlineMode(premium);
-
+        User user = UserManager.getUser(connection.getName());
+        if (user == null) {
+            PremiumHelper.checkPremiumPerLogin(connection.getName())
+                    .thenAccept(premium -> UserManager.createUser(connection.getUniqueId(), connection.getName(), connection.getAddress().getAddress().getHostAddress(), premium))
+                    .exceptionally(throwable -> {
+                        AntAuth.getInstance().getProxy().getLogger().warning("An error occurred with player verification: " + connection.getName() + " Error: " + throwable.getMessage());
+                        return null;
+                    });
+            event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.success.createUser")));
+            event.setCancelled(true);
+        } else {
+            connection.setOnlineMode(user.isPremium());
+        }
         times.put(connection.getAddress().getAddress().getHostAddress(), System.currentTimeMillis() + 1500L);
     }
 

@@ -21,6 +21,6 @@ public class TimeLoginRunnable implements Runnable
         if (this.user.isLogged()) {
             return;
         }
-        this.player.disconnect(ConfigurationPlugin.getConfiguration().getString(ChatHelper.fixColor("messages.error.timeoutLogin")));
+        this.player.disconnect(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.timeoutLogin")));
     }
 }

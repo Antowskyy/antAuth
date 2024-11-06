@@ -8,6 +8,7 @@ import pl.antowskyy.antauth.AntAuth;
 import pl.antowskyy.antauth.configuration.ConfigurationPlugin;
 import pl.antowskyy.antauth.data.User;
 import pl.antowskyy.antauth.helpers.ChatHelper;
+import pl.antowskyy.antauth.managers.QueueManager;
 import pl.antowskyy.antauth.managers.UserManager;
 import pl.antowskyy.antauth.runnables.MessageLoginRunnable;
 
@@ -15,8 +16,11 @@ import java.util.List;
 
 public class RegisterCommand extends Command
 {
-    public RegisterCommand() {
+    private final QueueManager queueManager;
+
+    public RegisterCommand(QueueManager queueManager) {
         super("register", null, "reg");
+        this.queueManager = queueManager;
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -61,5 +65,6 @@ public class RegisterCommand extends Command
                 ChatHelper.handleChatMessage(player, message);
             }
         }
+        queueManager.addPlayerToQueue(player);
     }
 }

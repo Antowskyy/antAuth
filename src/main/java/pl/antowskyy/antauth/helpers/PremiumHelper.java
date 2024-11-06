@@ -1,5 +1,8 @@
 package pl.antowskyy.antauth.helpers;
 
+import com.github.tsohr.JSONObject;
+import pl.antowskyy.antauth.AntAuth;
+
 import java.io.IOException;
 import java.net.*;
 import java.net.http.*;
@@ -7,22 +10,36 @@ import java.util.concurrent.CompletableFuture;
 
 public class PremiumHelper
 {
-    public static boolean checkPremium(String name) throws IOException {
-        HttpURLConnection connection = null;
-        try {
-            connection = (HttpURLConnection)(new URL(String.format("https://api.ashcon.app/mojang/v2/user/%s", name))).openConnection();
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36 Edg/86.0.622.63");
-            return connection.getResponseCode() == 200;
-        }
-        finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
+    public static CompletableFuture<String> getUUID(String name) {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.mojang.com/users/profiles/minecraft/" + name)).build();
+        return HttpClient.newHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    if (response.statusCode() == 200) {
+                        JSONObject jsonObject = new JSONObject(response.body());
+                        return jsonObject.getString("id");
+                    }
+                    AntAuth.getInstance().getProxy().getLogger().warning("Failed to fetch UUID for " + name + " with status code: " + response.statusCode());
+                    return null;
+                }).exceptionally(throwable -> {
+                    AntAuth.getInstance().getProxy().getLogger().warning("Exception occurred while fetching UUID for " + name + ": " + throwable.getMessage());
+                    return null;
+                });
     }
 
-    public static CompletableFuture<Boolean> checkPremium2(String name) {
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api.ashcon.app/mojang/v2/user/" + name)).build();
-        return (HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::statusCode)).thenApply(statusCode -> statusCode == 200);
+    public static CompletableFuture<Boolean> checkPremium(String uuid) {
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)).build();
+        return HttpClient.newHttpClient()
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> response.statusCode() == 200)
+                .exceptionally(throwable -> {
+                    AntAuth.getInstance().getProxy().getLogger().warning("Exception occurred while checking premium status for UUID: " + uuid + ": " + throwable.getMessage());
+                    return Boolean.FALSE;
+                });
     }
+
+    public static CompletableFuture<Boolean> checkPremiumPerLogin(String name) {
+        return getUUID(name).thenCompose(uuid -> (uuid != null) ? checkPremium(uuid) : CompletableFuture.completedFuture(Boolean.FALSE));
+    }
+
 }

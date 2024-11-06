@@ -80,7 +80,7 @@ public class User
         update();
     }
 
-    private void insert() {
+    public void insert() {
         AntAuth.getDatabase().executeUpdate("INSERT INTO `antauth_users` (uuid, name, password, premium, lastip, registered, logged) VALUES ('" + uuid.toString() + "', '" + name + "', '" + password + "','" + (isPremium() ? 1 : 0) + "','" + lastIP + "','" + (isRegistered() ? 1 : 0) + "','" + (isLogged() ? 1 : 0) + "')");
     }
 
