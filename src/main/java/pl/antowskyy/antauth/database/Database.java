@@ -9,8 +9,8 @@ public class Database
 {
     private final HikariDataSource dataSource;
 
-    public Database() {
-
+    public Database()
+    {
         this.dataSource = new HikariDataSource();
         this.dataSource.setJdbcUrl("jdbc:mysql://" + ConfigurationPlugin.getConfiguration().getString("database.host") + ":" + ConfigurationPlugin.getConfiguration().getString("database.port") + "/" + ConfigurationPlugin.getConfiguration().getString("database.base"));
         this.dataSource.setUsername(ConfigurationPlugin.getConfiguration().getString("database.user"));

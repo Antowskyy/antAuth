@@ -41,5 +41,4 @@ public class PremiumHelper
     public static CompletableFuture<Boolean> checkPremiumPerLogin(String name) {
         return getUUID(name).thenCompose(uuid -> (uuid != null) ? checkPremium(uuid) : CompletableFuture.completedFuture(Boolean.FALSE));
     }
-
 }

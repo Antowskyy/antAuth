@@ -5,29 +5,22 @@ import pl.antowskyy.antauth.AntAuth;
 import java.sql.*;
 import java.util.UUID;
 
+@Getter
 public class User
 {
     private UUID uuid;
-    @Getter
-    private String name;
-    @Getter
+    private final String name;
     private String password;
-    @Getter
-    private boolean premium;
-    @Getter
+    private final boolean premium;
     private String lastIP;
-    @Getter
     private boolean registered;
-    @Getter
     private boolean logged;
-
 
     public User(UUID uuid, String name, String lastIP, Boolean premium) {
         this.uuid = uuid;
         this.name = name;
         this.lastIP = lastIP;
         this.premium = premium;
-        this.insert();
     }
 
     public User(ResultSet resultSet) throws SQLException {
@@ -44,14 +37,8 @@ public class User
         return uuid;
     }
 
-
     public void setUUID(UUID uuid) {
         this.uuid = uuid;
-        update();
-    }
-
-    public void setName(String name) {
-        this.name = name;
         update();
     }
 
@@ -62,11 +49,6 @@ public class User
 
     public void setPassword(String password) {
         this.password = password;
-        update();
-    }
-
-    public void setPremium(boolean status) {
-        this.premium = status;
         update();
     }
 
@@ -87,5 +69,4 @@ public class User
     public void update() {
         AntAuth.getDatabase().executeUpdate("UPDATE `antauth_users` SET `uuid` = '" + uuid + "', `password` = '" + password + "', `premium` = '" + (isPremium() ? 1 : 0) + "', `lastip` = '" + lastIP + "', `registered` = '" + (isRegistered() ? 1 : 0) + "', `logged` = '" + (isLogged() ? 1 : 0) + "' WHERE `name` = '" + name + "';");
     }
-
 }

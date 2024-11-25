@@ -19,8 +19,7 @@ public class PreLoginHandler implements Listener {
 
     @EventHandler(priority = 10)
     public void onLogin(LoginEvent event) {
-        if (event.isCancelled())
-            return;
+        if (event.isCancelled()) return;
         PendingConnection connection = event.getConnection();
         String name = event.getConnection().getName();
         User user = UserManager.getUser(connection.getName());
@@ -35,8 +34,7 @@ public class PreLoginHandler implements Listener {
 
     @EventHandler(priority = 69)
     public void onPreLogin(PreLoginEvent event) {
-        if (event.isCancelled())
-            return;
+        if (event.isCancelled()) return;
         PendingConnection connection = event.getConnection();
         if (AntAuth.getInstance().getProxy().getPlayers().contains(AntAuth.getInstance().getProxy().getPlayer(connection.getName()))) {
             event.setCancelled(true);
@@ -47,12 +45,6 @@ public class PreLoginHandler implements Listener {
         if (loginLong != null && loginLong > System.currentTimeMillis()) {
             event.setCancelled(true);
             event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.connectCooldown").replace("{TIME}", TimeHelper.timeToString(System.currentTimeMillis() - loginLong))));
-            return;
-        }
-        ProxiedPlayer player = AntAuth.getInstance().getProxy().getPlayer(event.getConnection().getName());
-        if (AntAuth.getInstance().getProxy().getPlayers().contains(player)) {
-            event.setCancelled(true);
-            event.setCancelReason(ChatHelper.fixColor(ConfigurationPlugin.getConfiguration().getString("messages.error.playerOnline").replace("{PLAYER}", event.getConnection().getName())));
             return;
         }
         if (!pattern.matcher(event.getConnection().getName()).find()) {
@@ -75,5 +67,4 @@ public class PreLoginHandler implements Listener {
         }
         times.put(connection.getAddress().getAddress().getHostAddress(), System.currentTimeMillis() + 1500L);
     }
-
 }

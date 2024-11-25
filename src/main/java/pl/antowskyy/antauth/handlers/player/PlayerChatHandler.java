@@ -20,14 +20,14 @@ public final class PlayerChatHandler implements Listener
 
         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
         User user = UserManager.getUser(player.getName());
-        if (Objects.isNull(user)) {
+        if (user == null) {
             return;
         }
-        if (!player.getServer().getInfo().getName().equalsIgnoreCase("auth")) {
+        if (!player.getServer().getInfo().getName().equalsIgnoreCase(ConfigurationPlugin.getConfiguration().getString("auth-settings.auth-server"))) {
             return;
         }
 
-        final String message = event.getMessage().split(" ")[0];
+        String message = event.getMessage().split(" ")[0];
         if (user.isLogged() || message.equalsIgnoreCase("/login") || message.equalsIgnoreCase("/l")
                 || message.equalsIgnoreCase("/register") || message.equalsIgnoreCase("/reg")) {
             return;
